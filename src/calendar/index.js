@@ -75,7 +75,9 @@ class Calendar extends Component {
     // Handler which gets executed when press arrow icon left. It receive a callback can go back month
     onPressArrowLeft: PropTypes.func,
     // Handler which gets executed when press arrow icon left. It receive a callback can go next month
-    onPressArrowRight: PropTypes.func
+    onPressArrowRight: PropTypes.func,
+
+    showCurrentWeekOnly: PropTypes.bool,
   };
 
   constructor(props) {
@@ -244,9 +246,15 @@ class Calendar extends Component {
   render() {
     const days = dateutils.page(this.state.currentMonth, this.props.firstDay);
     const weeks = [];
-    while (days.length) {
+    if(this.props.showCurrentWeekOnly) {
       weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
     }
+    else {
+      while (days.length) {
+        weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
+      }
+    }
+
     let indicator;
     const current = parseDate(this.props.current);
     if (current) {
